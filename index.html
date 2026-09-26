@@ -123,43 +123,36 @@
         <div class="index-row index-row-head" role="row">
           <span role="columnheader">Area</span>
           <span role="columnheader">Deskripsi teknis</span>
-          <span role="columnheader">Status</span>
         </div>
 
         <div class="index-row" role="row">
           <span role="cell" class="index-name">AI Agent</span>
           <span role="cell">Sistem agent yang menjalankan tugas bertahap: perencanaan, pemanggilan tool, dan eksekusi berbasis konteks.</span>
-          <span role="cell"><span class="status-dot status-active" aria-hidden="true"></span>active</span>
         </div>
 
         <div class="index-row" role="row">
           <span role="cell" class="index-name">AI Gateway / API</span>
           <span role="cell">Lapisan penghubung antara aplikasi dan model AI: routing request, rate limiting, dan normalisasi response.</span>
-          <span role="cell"><span class="status-dot status-experimental" aria-hidden="true"></span>experimental</span>
         </div>
 
         <div class="index-row" role="row">
           <span role="cell" class="index-name">AI Automation</span>
           <span role="cell">Otomatisasi alur kerja berulang menggunakan AI sebagai pengambil keputusan di tengah pipeline.</span>
-          <span role="cell"><span class="status-dot status-experimental" aria-hidden="true"></span>experimental</span>
         </div>
 
         <div class="index-row" role="row">
           <span role="cell" class="index-name">Developer Tools</span>
           <span role="cell">Perkakas untuk mempercepat siklus pengembangan: CLI, boilerplate, dan integrasi API AI.</span>
-          <span role="cell"><span class="status-dot status-active" aria-hidden="true"></span>active</span>
         </div>
 
         <div class="index-row" role="row">
           <span role="cell" class="index-name">AI Search</span>
           <span role="cell">Pencarian berbasis semantik/embedding untuk konten teknis dan basis pengetahuan internal.</span>
-          <span role="cell"><span class="status-dot status-planned" aria-hidden="true"></span>planned</span>
         </div>
 
         <div class="index-row" role="row">
           <span role="cell" class="index-name">AI-powered Software</span>
           <span role="cell">Aplikasi end-user yang menyematkan kemampuan AI sebagai fitur inti, bukan tempelan.</span>
-          <span role="cell"><span class="status-dot status-planned" aria-hidden="true"></span>planned</span>
         </div>
       </div>
     </div>
@@ -191,79 +184,52 @@
     </div>
   </section>
 
-  <!-- RESEARCH / LAB NOTES -->
+  <!-- ACTIVITY LOG (from GitHub) -->
   <section class="section section-alt" id="research" aria-labelledby="research-heading">
     <div class="section-inner">
       <div class="section-head">
-        <span class="section-index">lab notes</span>
-        <h2 id="research-heading">Research / Lab Notes</h2>
+        <span class="section-index">activity</span>
+        <h2 id="research-heading">Engineering Log</h2>
       </div>
       <p class="section-intro">
-        Catatan eksperimen, benchmark, dan uji arsitektur. Ditulis sebagai log
-        teknis, bukan artikel pemasaran.
+        Aktivitas commit terbaru, diambil langsung dari GitHub secara otomatis.
       </p>
 
-      <ul class="log-list">
-        <li class="log-entry">
-          <div class="log-meta">
-            <time datetime="[YYYY-MM-DD]">[YYYY-MM-DD]</time>
-            <span class="log-tag">[tag: architecture]</span>
-          </div>
-          <h3>[JUDUL EKSPERIMEN]</h3>
-          <p>[Ringkasan hipotesis, metode pengujian, dan hasil awal.]</p>
-        </li>
-        <li class="log-entry">
-          <div class="log-meta">
-            <time datetime="[YYYY-MM-DD]">[YYYY-MM-DD]</time>
-            <span class="log-tag">[tag: benchmark]</span>
-          </div>
-          <h3>[JUDUL EKSPERIMEN]</h3>
-          <p>[Ringkasan hipotesis, metode pengujian, dan hasil awal.]</p>
-        </li>
+      <ul class="log-list" id="activity-log" aria-live="polite">
+        <li class="loading-note" id="activity-loading">Memuat aktivitas dari GitHub…</li>
       </ul>
+      <p class="error-note" id="activity-error" hidden>
+        Tidak dapat memuat aktivitas dari GitHub saat ini, atau belum ada aktivitas publik terbaru.
+        <a href="https://github.com/AksaraXAI" target="_blank" rel="noopener">Lihat langsung di GitHub <span class="ext-icon" aria-hidden="true">↗</span></a>
+      </p>
     </div>
   </section>
 
   <!-- DEVELOPER -->
   <section class="section" id="developer" aria-labelledby="developer-heading">
-    <div class="section-inner developer-grid">
-      <div>
-        <div class="section-head">
-          <span class="section-index">developer</span>
-          <h2 id="developer-heading">Sabela Rohmad</h2>
-        </div>
-        <p class="lead-text">
-          Developer di balik Aksara Eksponensial Satoshi. Membangun dan
-          mendokumentasikan sistem AI yang ditampilkan pada portfolio ini.
-        </p>
-        <dl class="meta-list">
-          <div>
-            <dt>Fokus kerja</dt>
-            <dd>AI agents, AI infrastructure, developer tooling</dd>
-          </div>
-          <div>
-            <dt>GitHub</dt>
-            <dd><a href="[GITHUB_PROFILE_URL]" target="_blank" rel="noopener">[GITHUB_PROFILE_URL] <span class="ext-icon" aria-hidden="true">↗</span></a></dd>
-          </div>
-          <div>
-            <dt>Kontak</dt>
-            <dd><a href="mailto:[EMAIL]">[EMAIL]</a></dd>
-          </div>
-        </dl>
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="section-index">developer</span>
+        <h2 id="developer-heading">Sabela Rohmad</h2>
       </div>
-      <div class="terminal-panel" aria-hidden="true">
-        <div class="terminal-bar">
-          <span></span><span></span><span></span>
+      <p class="lead-text">
+        Developer di balik Aksara Eksponensial Satoshi. Membangun dan
+        mendokumentasikan sistem AI yang ditampilkan pada portfolio ini.
+      </p>
+      <dl class="meta-list">
+        <div>
+          <dt>Fokus kerja</dt>
+          <dd>AI agents, AI infrastructure, developer tooling</dd>
         </div>
-        <pre class="terminal-body"><code>$ whoami
-sabela-rohmad
-
-$ role
-developer @ aksara-eksponensial-satoshi
-
-$ focus
-["ai-agents", "infrastructure", "dev-tools"]</code></pre>
-      </div>
+        <div>
+          <dt>GitHub</dt>
+          <dd><a href="[GITHUB_PROFILE_URL]" target="_blank" rel="noopener">[GITHUB_PROFILE_URL] <span class="ext-icon" aria-hidden="true">↗</span></a></dd>
+        </div>
+        <div>
+          <dt>Kontak</dt>
+          <dd><a href="mailto:[EMAIL]">[EMAIL]</a></dd>
+        </div>
+      </dl>
     </div>
   </section>
 

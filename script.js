@@ -36,7 +36,7 @@
 
   /* ---------- Reveal on scroll (static sections) ---------- */
   var staticRevealTargets = document.querySelectorAll(
-    ".section-head, .log-entry, .index-table, .terminal-panel"
+    ".section-head, .log-entry, .index-table"
   );
 
   staticRevealTargets.forEach(function (el) {
@@ -149,18 +149,10 @@
       : "Belum ada deskripsi di GitHub.";
     var stack = repo.language ? escapeHTML(repo.language) : "Belum diisi di GitHub";
     var repoUrl = repo.html_url;
-    var demoUrl = repo.homepage && repo.homepage.trim() ? repo.homepage.trim() : null;
 
     var article = document.createElement("article");
     article.className = "project-card reveal is-visible";
     article.setAttribute("data-status", status);
-
-    var demoRow = demoUrl
-      ? "<div><dt>Demo</dt><dd>" + escapeHTML(demoUrl) + "</dd></div>"
-      : "";
-    var demoAction = demoUrl
-      ? '<a href="' + escapeHTML(demoUrl) + '" class="link-arrow" target="_blank" rel="noopener">Demo <span class="ext-icon" aria-hidden="true">\u2197</span></a>'
-      : "";
 
     article.innerHTML =
       '<div class="project-top">' +
@@ -171,11 +163,9 @@
       '<dl class="project-meta">' +
         "<div><dt>Stack</dt><dd>" + stack + "</dd></div>" +
         "<div><dt>Repo</dt><dd>" + escapeHTML(repo.full_name) + "</dd></div>" +
-        demoRow +
       "</dl>" +
       '<div class="project-actions">' +
         '<a href="' + escapeHTML(repoUrl) + '" class="link-arrow" target="_blank" rel="noopener">Source <span class="ext-icon" aria-hidden="true">\u2197</span></a>' +
-        demoAction +
       "</div>";
 
     return article;
@@ -241,4 +231,81 @@
     })
     .then(renderProjects)
     .catch(showFetchError);
+
+  /* ---------- Engineering Log: recent commits from GitHub ---------- */
+  var activityLog = document.getElementById("activity-log");
+  var activityLoading = document.getElementById("activity-loading");
+  var activityError = document.getElementById("activity-error");
+
+  function timeAgo(dateStr) {
+    var diffMs = Date.now() - new Date(dateStr).getTime();
+    var minutes = Math.floor(diffMs / 60000);
+    if (minutes < 60) return minutes + " menit lalu";
+    var hours = Math.floor(minutes / 60);
+    if (hours < 24) return hours + " jam lalu";
+    var days = Math.floor(hours / 24);
+    if (days < 30) return days + " hari lalu";
+    var months = Math.floor(days / 30);
+    return months + " bulan lalu";
+  }
+
+  function buildLogEntry(commit) {
+    var li = document.createElement("li");
+    li.className = "log-entry reveal is-visible";
+
+    var messageLine = commit.message.split("\n")[0];
+    var shortSha = commit.sha.substring(0, 7);
+    var commitUrl = "https://github.com/" + commit.repoName + "/commit/" + commit.sha;
+
+    li.innerHTML =
+      '<div class="log-meta">' +
+        '<time datetime="' + escapeHTML(commit.date) + '">' + escapeHTML(timeAgo(commit.date)) + "</time>" +
+        '<span class="log-tag">' + escapeHTML(commit.repoName) + "</span>" +
+      "</div>" +
+      "<h3>" + escapeHTML(messageLine) + "</h3>" +
+      '<p><a href="' + escapeHTML(commitUrl) + '" class="link-arrow" target="_blank" rel="noopener">' + escapeHTML(shortSha) + ' <span class="ext-icon" aria-hidden="true">\u2197</span></a></p>';
+
+    return li;
+  }
+
+  function renderActivity(events) {
+    if (activityLoading) activityLoading.remove();
+
+    var commits = [];
+    events.forEach(function (event) {
+      if (event.type !== "PushEvent" || !event.payload || !event.payload.commits) return;
+      event.payload.commits.forEach(function (c) {
+        commits.push({
+          sha: c.sha,
+          message: c.message || "(tanpa pesan commit)",
+          repoName: event.repo.name,
+          date: event.created_at
+        });
+      });
+    });
+
+    if (commits.length === 0) {
+      if (activityError) activityError.hidden = false;
+      return;
+    }
+
+    commits.slice(0, 8).forEach(function (commit) {
+      activityLog.appendChild(buildLogEntry(commit));
+    });
+
+    enforceNoopener();
+  }
+
+  function showActivityError() {
+    if (activityLoading) activityLoading.remove();
+    if (activityError) activityError.hidden = false;
+  }
+
+  fetch("https://api.github.com/users/" + GITHUB_USERNAME + "/events/public?per_page=30")
+    .then(function (response) {
+      if (!response.ok) throw new Error("GitHub API error: " + response.status);
+      return response.json();
+    })
+    .then(renderActivity)
+    .catch(showActivityError);
 })();
