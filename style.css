@@ -456,10 +456,25 @@ dl { margin: 0; }
   border-color: var(--accent);
 }
 
-.empty-note {
+.empty-note,
+.loading-note {
   color: var(--text-muted);
   font-family: var(--font-mono);
   font-size: 0.85rem;
+}
+
+.error-note {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  background: var(--panel);
+}
+
+.error-note a {
+  color: var(--accent);
+  text-decoration: underline;
 }
 
 /* ---------- Research / Lab Notes ---------- */

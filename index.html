@@ -180,58 +180,14 @@
         <button class="filter-btn" data-filter="archived">Archived</button>
       </div>
 
-      <div class="project-list" id="project-list">
-
-        <article class="project-card" data-status="active">
-          <div class="project-top">
-            <h3>[PROJECT NAME]</h3>
-            <span class="status-tag"><span class="status-dot status-active" aria-hidden="true"></span>active</span>
-          </div>
-          <p class="project-desc">[DESCRIPTION — problem yang dikerjakan dan pendekatan teknis]</p>
-          <dl class="project-meta">
-            <div><dt>Stack</dt><dd>[TECH STACK]</dd></div>
-            <div><dt>Repo</dt><dd>[GITHUB URL]</dd></div>
-            <div><dt>Demo</dt><dd>[DEMO URL]</dd></div>
-          </dl>
-          <div class="project-actions">
-            <a href="[GITHUB URL]" class="link-arrow" target="_blank" rel="noopener">Source <span class="ext-icon" aria-hidden="true">↗</span></a>
-            <a href="[DEMO URL]" class="link-arrow" target="_blank" rel="noopener">Demo <span class="ext-icon" aria-hidden="true">↗</span></a>
-          </div>
-        </article>
-
-        <article class="project-card" data-status="experimental">
-          <div class="project-top">
-            <h3>[PROJECT NAME]</h3>
-            <span class="status-tag"><span class="status-dot status-experimental" aria-hidden="true"></span>experimental</span>
-          </div>
-          <p class="project-desc">[DESCRIPTION — problem yang dikerjakan dan pendekatan teknis]</p>
-          <dl class="project-meta">
-            <div><dt>Stack</dt><dd>[TECH STACK]</dd></div>
-            <div><dt>Repo</dt><dd>[GITHUB URL]</dd></div>
-            <div><dt>Demo</dt><dd>[DEMO URL]</dd></div>
-          </dl>
-          <div class="project-actions">
-            <a href="[GITHUB URL]" class="link-arrow" target="_blank" rel="noopener">Source <span class="ext-icon" aria-hidden="true">↗</span></a>
-          </div>
-        </article>
-
-        <article class="project-card" data-status="archived">
-          <div class="project-top">
-            <h3>[PROJECT NAME]</h3>
-            <span class="status-tag"><span class="status-dot status-archived" aria-hidden="true"></span>archived</span>
-          </div>
-          <p class="project-desc">[DESCRIPTION — problem yang dikerjakan dan pendekatan teknis]</p>
-          <dl class="project-meta">
-            <div><dt>Stack</dt><dd>[TECH STACK]</dd></div>
-            <div><dt>Repo</dt><dd>[GITHUB URL]</dd></div>
-          </dl>
-          <div class="project-actions">
-            <a href="[GITHUB URL]" class="link-arrow" target="_blank" rel="noopener">Source <span class="ext-icon" aria-hidden="true">↗</span></a>
-          </div>
-        </article>
-
+      <div class="project-list" id="project-list" aria-live="polite">
+        <p class="loading-note" id="project-loading">Memuat proyek dari GitHub…</p>
       </div>
       <p class="empty-note" id="empty-note" hidden>Belum ada proyek pada status ini.</p>
+      <p class="error-note" id="project-error" hidden>
+        Tidak dapat memuat data proyek dari GitHub saat ini.
+        <a href="https://github.com/AksaraXAI" target="_blank" rel="noopener">Lihat langsung di GitHub <span class="ext-icon" aria-hidden="true">↗</span></a>
+      </p>
     </div>
   </section>
 
