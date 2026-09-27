@@ -314,35 +314,6 @@ dl { margin: 0; }
   font-size: 0.95rem;
 }
 
-/* ---------- Systems index table ---------- */
-
-.index-table {
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-
-.index-row {
-  display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 1.2rem;
-  padding: 1rem 1.2rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.index-row:last-child { border-bottom: none; }
-
-.index-row-head {
-  background: var(--panel);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-.index-name {
-  font-weight: 600;
-}
-
 /* ---------- Projects ---------- */
 
 .filter-bar {
@@ -493,21 +464,61 @@ dl { margin: 0; }
 .log-entry h3 { margin-bottom: 0.4rem; }
 .log-entry p { color: var(--text-muted); font-size: 0.95rem; }
 
+/* ---------- Developer ---------- */
+
+.dev-inner {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.dev-avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
 /* ---------- Stack ---------- */
 
 .stack-list {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.7rem;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
-.stack-list li {
+.stack-item {
+  display: grid;
+  grid-template-columns: 140px 1fr 50px;
+  align-items: center;
+  gap: 0.8rem;
   font-family: var(--font-mono);
-  font-size: 0.82rem;
-  border: 1px solid var(--border-strong);
-  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+.stack-item .stack-name {
+  color: var(--text);
+}
+
+.stack-bar-track {
+  height: 6px;
+  background: var(--panel);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.stack-bar-fill {
+  height: 100%;
+  background: var(--accent);
+}
+
+.stack-item .stack-pct {
   color: var(--text-muted);
+  text-align: right;
 }
 
 /* ---------- GitHub section ---------- */
@@ -598,14 +609,12 @@ dl { margin: 0; }
     grid-template-columns: 1fr;
   }
 
-  .index-row {
-    grid-template-columns: 1fr;
-    gap: 0.4rem;
-  }
-  .index-row-head { display: none; }
-
   .project-meta {
     grid-template-columns: 1fr;
+  }
+
+  .stack-item {
+    grid-template-columns: 100px 1fr 40px;
   }
 }
 

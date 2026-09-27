@@ -36,7 +36,7 @@
 
   /* ---------- Reveal on scroll (static sections) ---------- */
   var staticRevealTargets = document.querySelectorAll(
-    ".section-head, .log-entry, .index-table"
+    ".section-head, .log-entry"
   );
 
   staticRevealTargets.forEach(function (el) {
@@ -224,13 +224,89 @@
     if (errorNote) errorNote.hidden = false;
   }
 
+  /* ---------- Tech Stack: aggregate languages from all repos ---------- */
+  var stackList = document.getElementById("stack-list");
+  var stackLoading = document.getElementById("stack-loading");
+  var stackError = document.getElementById("stack-error");
+
+  function showStackError() {
+    if (stackLoading) stackLoading.remove();
+    if (stackError) stackError.hidden = false;
+  }
+
+  function renderTechStack(repos) {
+    var nonForkRepos = repos.filter(function (repo) {
+      return !repo.fork;
+    });
+
+    if (nonForkRepos.length === 0) {
+      showStackError();
+      return;
+    }
+
+    var fetches = nonForkRepos.map(function (repo) {
+      return fetch(repo.languages_url)
+        .then(function (res) {
+          return res.ok ? res.json() : {};
+        })
+        .catch(function () {
+          return {};
+        });
+    });
+
+    Promise.all(fetches).then(function (results) {
+      var totals = {};
+      results.forEach(function (langBytes) {
+        Object.keys(langBytes).forEach(function (lang) {
+          totals[lang] = (totals[lang] || 0) + langBytes[lang];
+        });
+      });
+
+      var entries = Object.keys(totals).map(function (lang) {
+        return { name: lang, bytes: totals[lang] };
+      });
+
+      if (stackLoading) stackLoading.remove();
+
+      if (entries.length === 0) {
+        showStackError();
+        return;
+      }
+
+      var grandTotal = entries.reduce(function (sum, e) {
+        return sum + e.bytes;
+      }, 0);
+
+      entries.sort(function (a, b) {
+        return b.bytes - a.bytes;
+      });
+
+      entries.slice(0, 8).forEach(function (entry) {
+        var pct = ((entry.bytes / grandTotal) * 100).toFixed(1);
+        var li = document.createElement("li");
+        li.className = "stack-item";
+        li.innerHTML =
+          '<span class="stack-name">' + escapeHTML(entry.name) + "</span>" +
+          '<span class="stack-bar-track"><span class="stack-bar-fill" style="width:' + pct + '%"></span></span>' +
+          '<span class="stack-pct">' + pct + "%</span>";
+        stackList.appendChild(li);
+      });
+    });
+  }
+
   fetch("https://api.github.com/users/" + GITHUB_USERNAME + "/repos?sort=pushed&per_page=100")
     .then(function (response) {
       if (!response.ok) throw new Error("GitHub API error: " + response.status);
       return response.json();
     })
-    .then(renderProjects)
-    .catch(showFetchError);
+    .then(function (repos) {
+      renderProjects(repos);
+      renderTechStack(repos);
+    })
+    .catch(function () {
+      showFetchError();
+      showStackError();
+    });
 
   /* ---------- Engineering Log: recent commits from GitHub ---------- */
   var activityLog = document.getElementById("activity-log");
@@ -308,4 +384,68 @@
     })
     .then(renderActivity)
     .catch(showActivityError);
+
+  /* ---------- Developer profile ---------- */
+  var devAvatar = document.getElementById("dev-avatar");
+  var devBio = document.getElementById("dev-bio");
+  var devMeta = document.getElementById("dev-meta");
+  var devEmailLink = document.getElementById("dev-email-link");
+
+  fetch("https://api.github.com/users/" + GITHUB_USERNAME)
+    .then(function (response) {
+      if (!response.ok) throw new Error("GitHub API error: " + response.status);
+      return response.json();
+    })
+    .then(function (profile) {
+      if (profile.avatar_url && devAvatar) {
+        devAvatar.src = profile.avatar_url;
+        devAvatar.hidden = false;
+      }
+
+      if (profile.bio && devBio) {
+        devBio.textContent = profile.bio;
+      }
+
+      if (profile.email && devEmailLink) {
+        devEmailLink.href = "mailto:" + profile.email;
+        devEmailLink.textContent = profile.email;
+      }
+
+      if (profile.created_at && devMeta) {
+        var year = new Date(profile.created_at).getFullYear();
+        var row = document.createElement("div");
+        row.innerHTML = "<dt>Aktif sejak</dt><dd>" + year + "</dd>";
+        devMeta.appendChild(row);
+      }
+    })
+    .catch(function () {
+      /* keep static fallback content */
+    });
+
+  /* ---------- Contact: social accounts ---------- */
+  var contactXLink = document.getElementById("contact-x-link");
+  var contactLinkedinLink = document.getElementById("contact-linkedin-link");
+
+  fetch("https://api.github.com/users/" + GITHUB_USERNAME + "/social_accounts")
+    .then(function (response) {
+      if (!response.ok) throw new Error("GitHub API error: " + response.status);
+      return response.json();
+    })
+    .then(function (accounts) {
+      accounts.forEach(function (account) {
+        var provider = (account.provider || "").toLowerCase();
+        if ((provider === "twitter" || provider === "x") && contactXLink) {
+          contactXLink.href = account.url;
+          contactXLink.textContent = account.url;
+        }
+        if (provider === "linkedin" && contactLinkedinLink) {
+          contactLinkedinLink.href = account.url;
+          contactLinkedinLink.textContent = account.url;
+        }
+      });
+      enforceNoopener();
+    })
+    .catch(function () {
+      /* keep static placeholder */
+    });
 })();
